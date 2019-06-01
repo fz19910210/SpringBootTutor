@@ -8,10 +8,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,28 +16,36 @@ import java.util.List;
 @RestController
 @RequestMapping
 public class CourseController {
-    @Autowired // IOC
-    CourseService courseService; // Singleton
+    @Autowired // IOC 控制反转 本来courseService 是由java 控制的 现在spring 帮助控制 courseService
+    CourseService courseService; // Singleton bean 的封装
 
-    @GetMapping(path = "/", produces = "application/json")
+    @GetMapping(path = "/getAll", produces = "application/json")
     public HttpEntity findAllCourses(){
         List<Course> allCourses = courseService.findAllCourses();
 
-        return new ResponseEntity<>(allCourses,HttpStatus.OK);
+        return new ResponseEntity<>(allCourses, HttpStatus.OK);
     }
 
-//    @GetMapping(path = "/api/course/findAllCourses", produces = "application/json")
-//    public HttpEntity<List<CourseDto>> findAllCourses(){
-//        List<CourseDto> allCourses = courseService.findAllCourses();
-//
-//        return new ResponseEntity<>(allCourses, HttpStatus.OK);
-//    }
-
-    @GetMapping(path = "/look-up/{inputString}", produces = "application/json")
-    public HttpEntity<Course> searchCourse(@PathVariable("inputString") String inputString) {
-
-        List<Course> findedCourse = courseService.searchByCourseName(inputString);
-
-        return new ResponseEntity(findedCourse, HttpStatus.OK);
+    @PostMapping(path = "/add", produces = "application/json")
+    public HttpEntity<Course> addClass(@RequestBody Course newClass) {
+        List<Course> newList = courseService.addClass(newClass);
+        return new ResponseEntity(newList, HttpStatus.OK);
     }
+
+    @PutMapping(path = "/put", produces = "application/json")
+    public HttpEntity<Course> updateClass(@RequestBody Course changeForm) {
+        List<Course> newList = courseService.updateClass(changeForm);
+        return new ResponseEntity(newList, HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/delete", produces = "application/json")
+    public HttpEntity<Course> deleteClass(@RequestBody Course unwantedClass) {
+            List<Course> newList = courseService.deleteClass(unwantedClass);
+            return new ResponseEntity(newList, HttpStatus.OK);
+    }
+
+
+
+
+
 }

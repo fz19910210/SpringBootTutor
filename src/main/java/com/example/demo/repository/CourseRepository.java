@@ -31,16 +31,22 @@ public class CourseRepository {
         return  courses;
     }
 
-    public List<Course> findAllCourse(String searchByCourseName){
-
-        return new ArrayList<Course>();
+    public List<Course> addClass(Course newClass) {
+        courses.add(newClass);
+        return courses;
     }
 
-    public List<Course> findCourseByName(String courseName) {
-        if(courseName.equals("Java_I")) {
-            return courses;
+    public List<Course> deleteClass(Course unwantedClass) {
+        for (int i = 0; i < courses.size(); i++) {
+            if(courses.get(i).getClassName().equals(unwantedClass.getClassName())) courses.remove(i);
         }
-
-        return new ArrayList<Course>();
+        return courses;
     }
+
+    public List<Course> updateClass(Course changeForm) {
+        this.deleteClass(changeForm);
+        this.addClass(changeForm);
+        return courses;
+    }
+
 }
